@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_thoi_tiet/src/components/current/current_view_model.dart';
 import 'package:flutter_app_thoi_tiet/src/model/weather/weather.dart';
+import 'package:intl/intl.dart';
 
 class CurrentView extends StatefulWidget {
   final Current current;
@@ -26,14 +27,14 @@ class _CurrentViewState extends State<CurrentView> {
         height: 400,
         width: 400,
         decoration: BoxDecoration(
-          color: Colors.white24,
+          color: Colors.lightBlue,
           borderRadius: BorderRadius.all(
             Radius.circular(200),
           ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +50,8 @@ class _CurrentViewState extends State<CurrentView> {
               ],
             ),
             Text("${currentViewModel.current.weather[0].description}"),
-            Text("${currentViewModel.current.dt}")
+            Text(
+                "${DateFormat.yMd().add_jm().format(DateTime.fromMillisecondsSinceEpoch(currentViewModel.current.dt * 1000))}")
           ],
         ),
       ),

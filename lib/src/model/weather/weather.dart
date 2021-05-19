@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:flutter_app_thoi_tiet/src/units/tempunits.dart';
+
 Weather weatherFromJson(String str) => Weather.fromJson(json.decode(str));
 
 String weatherToJson(Weather data) => json.encode(data.toJson());
@@ -306,7 +308,7 @@ class Temp {
     this.morn,
   });
 
-  double day;
+  Temperature day;
   double min;
   double max;
   double night;
@@ -314,7 +316,7 @@ class Temp {
   double morn;
 
   factory Temp.fromJson(Map<String, dynamic> json) => Temp(
-        day: json["day"].toDouble(),
+        day: Temperature(json["day"].toDouble()),
         min: json["min"].toDouble(),
         max: json["max"].toDouble(),
         night: json["night"].toDouble(),

@@ -1,9 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_thoi_tiet/src/components/current/current_view.dart';
 import 'package:flutter_app_thoi_tiet/src/components/dailys/daily_view.dart';
 import 'package:flutter_app_thoi_tiet/src/components/hourlys/hourly_view.dart';
+import 'package:flutter_app_thoi_tiet/src/menu/drawer_menu.dart';
+import 'package:flutter_app_thoi_tiet/src/model/weather/weather.dart';
 import 'package:flutter_app_thoi_tiet/src/notifiers/daily_notifier.dart';
 import 'package:flutter_app_thoi_tiet/src/notifiers/hourly_notifier/hourly_notifier.dart';
+import 'package:flutter_app_thoi_tiet/src/service/http_client.dart';
 import 'package:flutter_app_thoi_tiet/src/service/httpserver.dart';
 import 'package:provider/provider.dart';
 
@@ -19,8 +23,32 @@ class _HomeViewState extends State<HomeView> {
         Provider.of<DailyNotifier>(context, listen: false);
     HourlyNotifier hourlyNotifier =
         Provider.of<HourlyNotifier>(context, listen: false);
-    HttpSever.getData(dailyNotifier, hourlyNotifier);
+    getData(dailyNotifier, hourlyNotifier);
     super.initState();
+  }
+
+  Future getData(
+      DailyNotifier dailyNotifier, HourlyNotifier hourlyNotifier) async {
+    Response response;
+    Weather dataWeather;
+    List<Daily> dailys;
+    List<Current> hourlys;
+
+    try {
+      response = await HttpClient.instance.dio.get("/hourlyweather.json");
+
+      if (response.statusCode == 200) {
+        dataWeather = Weather.fromJson(response.data);
+        dailys = dataWeather.daily.toList();
+        hourlys = dataWeather.hourly.toList();
+        dailyNotifier.setDailyList(dailys);
+        hourlyNotifier.setHourlyList(hourlys);
+      } else {
+        print("Not status 200");
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -32,11 +60,14 @@ class _HomeViewState extends State<HomeView> {
         appBar: AppBar(
           title: Text("New"),
         ),
+        drawer: DrawerMenu(),
         body: (dailyNotifier != null) && (hourlyNotifier != null)
             ? Container(
                 child: ListView(
                   children: [
-                    CurrentView(current: hourlyNotifier.getHourlyList()[0]),
+                    Center(
+                        child: CurrentView(
+                            current: hourlyNotifier.getHourlyList()[0])),
                     Container(
                       height: 400,
                       color: Colors.white,

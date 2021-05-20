@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_thoi_tiet/src/components/setting/setting_unit.dart';
 import 'package:flutter_app_thoi_tiet/src/notifiers/daily_notifier.dart';
 import 'package:flutter_app_thoi_tiet/src/notifiers/hourly_notifier/hourly_notifier.dart';
 import 'package:flutter_app_thoi_tiet/src/screen/background/backgound_view.dart';
 import 'package:flutter_app_thoi_tiet/src/screen/homeview/homeview.dart';
 import 'package:flutter_app_thoi_tiet/src/screen/location/location.dart';
 import 'package:flutter_app_thoi_tiet/src/screen/notify/notify_view.dart';
+import 'package:flutter_app_thoi_tiet/src/screen/unit/unit_view.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -16,6 +18,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => HourlyNotifier(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SettingUnits(),
         ),
       ],
       child: MyApp(),
@@ -38,7 +43,7 @@ class MyApp extends StatelessWidget {
         '/notify': (context) => NotifyView(),
         '/background': (context) => BackgroundView(),
         '/add_location': (context) => LocationView(),
-        '/unit': (context) => LocationView(),
+        '/unit': (context) => UnitView(),
       },
     );
   }
